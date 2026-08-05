@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import urlRouter from "./routes/system.routes.js";
+import interviewRouter from "./routes/interview.routes.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // Routes
 app.use(urlRouter);
+app.use(interviewRouter);
 
 
 const PORT = process.env.PORT || 5000;
