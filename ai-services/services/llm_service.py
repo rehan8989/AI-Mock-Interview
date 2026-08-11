@@ -18,7 +18,7 @@ load_dotenv()
 
 class JobSkills(BaseModel):
     skills: list[str] = Field(
-        description="Technical skills and technologies required by the job description"
+        description="Important skills, competencies, technologies, tools, and knowledge areas required for the job"
     )
 
 
@@ -62,17 +62,37 @@ mcq_llm = llm.with_structured_output(MCQResponse)
 def analyze_job_description(job_description):
 
     prompt = f"""
-    Analyze the following job description.
+Analyze the following job description.
 
-    Identify the important technical skills, technologies,
-    frameworks, programming languages, databases, and tools
-    required for this role.
+Identify the most important skills, competencies, knowledge areas,
+technologies, tools, and responsibilities required for this role.
 
-    Return only the relevant technical skills.
+The role may be technical or non-technical.
 
-    Job Description:
-    {job_description}
-    """
+For technical roles, include things such as:
+- programming languages
+- frameworks
+- databases
+- cloud platforms
+- APIs
+- development tools
+
+For non-technical roles, include things such as:
+- communication
+- customer service
+- problem solving
+- leadership
+- negotiation
+- conflict resolution
+- sales
+- teamwork
+
+Only include skills that are actually relevant to the job description.
+Do not invent unrelated technical skills.
+
+Job Description:
+{job_description}
+"""
 
     response = structured_llm.invoke(prompt)
 
@@ -83,57 +103,49 @@ def analyze_job_description(job_description):
 # 6. Generate MCQs
 # ============================================================
 
-def generate_mcqs(skills):
+def generate_mcqs(job_description, skills):
 
     prompt = f"""
-    Generate exactly 5 multiple-choice questions based on these
-    technical skills:
+Generate exactly 5 multiple-choice interview questions based on
+the following job description and extracted skills.
 
-    {skills}
+Job Description:
+{job_description}
 
-    Requirements:
-    - Each question must have exactly 4 options.
-    - Only one option must be correct.
-    - Include the correct answer.
-    - Identify which skill the question tests.
-    - Questions should be suitable for a technical job interview.
-    - Do not include explanations.
-    """
+Extracted Skills and Competencies:
+{skills}
+
+Requirements:
+
+- Generate questions that are directly relevant to the job description.
+- Use the extracted skills as the main areas to test.
+- Consider the industry, responsibilities, and context described in the job description.
+- The questions may be technical or non-technical depending on the role.
+- Do not introduce unrelated technologies, programming languages,
+  databases, or technical concepts.
+- Each question must have exactly 4 options.
+- Only one option must be correct.
+- The correctAnswer MUST be exactly one of the 4 options.
+- correctAnswer MUST NOT be the question text.
+- correctAnswer MUST match the selected option exactly, including wording.
+- Do not modify or paraphrase the correct answer after selecting it.
+- Identify which skill or competency the question tests.
+- Questions should be suitable for an actual job interview.
+- Questions should test practical understanding rather than obscure trivia.
+- Do not include explanations.
+
+Return exactly 5 questions.
+"""
 
     response = mcq_llm.invoke(prompt)
 
+    for question in response.questions:
+        if len(question.options) != 4:
+            raise ValueError("A question must have exactly 4 options.")
+
+        if question.correctAnswer not in question.options:
+            raise ValueError(
+                f"Correct answer is not one of the options: {question.question}"
+            )
+
     return response.questions
-
-
-# ============================================================
-# 7. Test Job Description
-# ============================================================
-
-job_description = """
-We are looking for a Software Engineer with experience in React,
-Node.js, Express, MongoDB, REST APIs and AWS.
-
-The candidate should have strong JavaScript knowledge and
-experience building scalable web applications.
-"""
-
-
-# ============================================================
-# 8. Test AI Pipeline
-# ============================================================
-
-skills = analyze_job_description(job_description)
-
-print("\nExtracted Skills:")
-print(skills)
-
-
-questions = generate_mcqs(skills)
-
-print("\nGenerated MCQs:")
-
-for question in questions:
-    print("\nQuestion:", question.question)
-    print("Options:", question.options)
-    print("Correct Answer:", question.correctAnswer)
-    print("Skill:", question.skill)

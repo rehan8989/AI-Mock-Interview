@@ -34,3 +34,43 @@ export const generateInterview = async (data) => {
     interview,
   };
 };
+
+export const evaluateInterview = async (data) => {
+    const { interviewId, answers } = data;
+
+    const interview = await Interview.findById(interviewId);
+
+    if (!interview) {
+        throw new Error("Interview not found");
+    }
+
+    let totalScore = 0; 
+
+    for (const answer of answers) {
+        const question = interview.questions.id(answer.questionId);
+
+        if (!question) {
+            continue;
+        }
+
+        question.userAnswer = answer.answer;
+
+        if (answer.answer === question.correctAnswer) {
+            question.score = 2;
+            totalScore += 2;
+        } else {
+            question.score = 0;
+        }
+    }
+
+    interview.totalScore = totalScore;
+
+    await interview.save();
+
+    return {
+        success: true,
+        message: "Interview evaluated successfully",
+        totalScore,
+        questions: interview.questions
+    };
+};

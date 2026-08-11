@@ -21,13 +21,21 @@ def health():
         "message": "AI service is running",
     }
 
-
 @app.post("/generate")
 def generate_assessment(data: JobDescriptionRequest):
 
+    print("1. /generate endpoint hit")
+
     skills = analyze_job_description(data.jobDescription)
 
-    questions = generate_mcqs(skills)
+    print("2. Skill extraction finished:", skills)
+
+    questions = generate_mcqs(
+    data.jobDescription,
+    skills
+)
+
+    print("3. Question generation finished")
 
     return {
         "success": True,
