@@ -2,16 +2,12 @@ import axios from "axios";
 import Interview from "../models/interview.model.js";
 
 export const generateInterview = async (data) => {
-
   const { jobDescription } = data;
 
   // Send the job description to the Python AI service
-  const aiResponse = await axios.post(
-    "http://localhost:8000/generate",
-    {
-      jobDescription,
-    }
-  );
+  const aiResponse = await axios.post("http://localhost:8000/generate", {
+    jobDescription,
+  });
 
   // Get the data returned by Python
   const { skills, questions } = aiResponse.data;
@@ -36,41 +32,55 @@ export const generateInterview = async (data) => {
 };
 
 export const evaluateInterview = async (data) => {
-    const { interviewId, answers } = data;
+  const { interviewId, answers } = data;
 
-    const interview = await Interview.findById(interviewId);
+  const interview = await Interview.findById(interviewId);
 
-    if (!interview) {
-        throw new Error("Interview not found");
+  if (!interview) {
+    throw new Error("Interview not found");
+  }
+
+  let totalScore = 0;
+
+  for (const answer of answers) {
+    const question = interview.questions.id(answer.questionId);
+
+    if (!question) {
+      continue;
     }
 
-    let totalScore = 0; 
+    question.userAnswer = answer.answer;
 
-    for (const answer of answers) {
-        const question = interview.questions.id(answer.questionId);
-
-        if (!question) {
-            continue;
-        }
-
-        question.userAnswer = answer.answer;
-
-        if (answer.answer === question.correctAnswer) {
-            question.score = 2;
-            totalScore += 2;
-        } else {
-            question.score = 0;
-        }
+    if (answer.answer === question.correctAnswer) {
+      question.score = 2;
+      totalScore += 2;
+    } else {
+      question.score = 0;
     }
+    const aiResponse = await axios.post("http://localhost:8000/feedback", {
+      question: question.questionText,
+      correctAnswer: question.correctAnswer,
+    });
 
-    interview.totalScore = totalScore;
+    question.aiFeedback = aiResponse.data.feedback;
+  }
 
-    await interview.save();
+  interview.totalScore = totalScore;
 
-    return {
-        success: true,
-        message: "Interview evaluated successfully",
-        totalScore,
-        questions: interview.questions
-    };
+  await interview.save();
+
+  return {
+    success: true,
+    message: "Interview evaluated successfully",
+    totalScore,
+    questions: interview.questions,
+  };
+};
+
+export const getInterviewHistory = async () => {
+  const interviews = await Interview.find().sort({ createdAt: -1 });
+  return {
+    success:true,
+    interviews,
+  };
 };

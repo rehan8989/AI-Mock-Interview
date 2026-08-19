@@ -1,7 +1,9 @@
 import express from "express";
 import {
     generateInterview,
-    evaluateInterview
+    evaluateInterview,
+    getInterviewHistory
+
 } from "../services/interview.service.js";
 
 const router = express.Router();
@@ -38,4 +40,17 @@ router.post("/api/interview/evaluate", async (req, res) => {
     }
 });
 
+router.get("/api/interview/history",async (req,res)=>{
+    try{
+        const result = await getInterviewHistory();
+        return res.status(200).json(result);
+    }
+    catch(error){
+        console.error("History Error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        })
+    }
+})
 export default router;
