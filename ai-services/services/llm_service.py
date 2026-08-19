@@ -34,6 +34,11 @@ class MCQResponse(BaseModel):
         description="Exactly 5 multiple-choice interview questions"
     )
 
+class AnswerFeedback(BaseModel):
+    feedback: str = Field(
+        description="A short explanation of why the correct answer is correct"
+    )
+
 
 # ============================================================
 # 3. LLM Setup
@@ -53,6 +58,8 @@ llm = ChatOpenAI(
 structured_llm = llm.with_structured_output(JobSkills)
 
 mcq_llm = llm.with_structured_output(MCQResponse)
+
+feedback_llm = llm.with_structured_output(AnswerFeedback)
 
 
 # ============================================================
@@ -149,3 +156,32 @@ Return exactly 5 questions.
             )
 
     return response.questions
+
+
+# ============================================================
+# 7. Answer Evaluation
+# ============================================================
+
+def generate_answer_feedback(question, correct_answer):
+
+    prompt = f"""
+Explain why the correct answer to the following interview question is correct.
+
+Question:
+{question}
+
+Correct Answer:
+{correct_answer}
+
+Requirements:
+- Give a short explanation.
+- Explain the concept or reasoning behind the correct answer.
+- Keep the explanation easy to understand.
+- Do not discuss the candidate's answer.
+- Do not provide alternative answers.
+- Keep the feedback to 1-2 sentences.
+"""
+
+    response = feedback_llm.invoke(prompt)
+
+    return response.feedback

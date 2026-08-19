@@ -4,14 +4,19 @@ from pydantic import BaseModel
 from services.llm_service import (
     analyze_job_description,
     generate_mcqs,
+    generate_answer_feedback,
 )
-
 
 app = FastAPI()
 
 
 class JobDescriptionRequest(BaseModel):
     jobDescription: str
+
+
+class AnswerFeedbackRequest(BaseModel):
+    question: str
+    correctAnswer: str
 
 
 @app.get("/health")
@@ -21,24 +26,33 @@ def health():
         "message": "AI service is running",
     }
 
+
 @app.post("/generate")
 def generate_assessment(data: JobDescriptionRequest):
 
-    print("1. /generate endpoint hit")
-
     skills = analyze_job_description(data.jobDescription)
 
-    print("2. Skill extraction finished:", skills)
-
     questions = generate_mcqs(
-    data.jobDescription,
-    skills
-)
-
-    print("3. Question generation finished")
+        data.jobDescription,
+        skills
+    )
 
     return {
         "success": True,
         "skills": skills,
         "questions": questions,
+    }
+
+
+@app.post("/feedback")
+def generate_feedback(data: AnswerFeedbackRequest):
+
+    feedback = generate_answer_feedback(
+        data.question,
+        data.correctAnswer
+    )
+
+    return {
+        "success": True,
+        "feedback": feedback,
     }
