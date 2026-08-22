@@ -1,9 +1,8 @@
 import os
-
+import json
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
-
 
 # ============================================================
 # 1. Environment Setup
@@ -15,6 +14,7 @@ load_dotenv()
 # ============================================================
 # 2. Pydantic Models
 # ============================================================
+
 
 class JobSkills(BaseModel):
     skills: list[str] = Field(
@@ -34,6 +34,7 @@ class MCQResponse(BaseModel):
         description="Exactly 5 multiple-choice interview questions"
     )
 
+
 class AnswerFeedback(BaseModel):
     feedback: str = Field(
         description="A short explanation of why the correct answer is correct"
@@ -45,7 +46,7 @@ class AnswerFeedback(BaseModel):
 # ============================================================
 
 llm = ChatOpenAI(
-    model="google/gemma-4-26b-a4b-it:free",
+    model="openai/gpt-oss-20b",
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1",
 )
@@ -55,16 +56,16 @@ llm = ChatOpenAI(
 # 4. Structured LLMs
 # ============================================================
 
-structured_llm = llm.with_structured_output(JobSkills)
+structured_llm = llm.with_structured_output(JobSkills, method="json_schema")
 
-mcq_llm = llm.with_structured_output(MCQResponse)
+mcq_llm = llm.with_structured_output(MCQResponse, method="json_schema")
 
-feedback_llm = llm.with_structured_output(AnswerFeedback)
-
+feedback_llm = llm.with_structured_output(AnswerFeedback, method="json_schema")
 
 # ============================================================
 # 5. Analyze Job Description
 # ============================================================
+
 
 def analyze_job_description(job_description):
 
@@ -157,10 +158,10 @@ Return exactly 5 questions.
 
     return response.questions
 
-
 # ============================================================
 # 7. Answer Evaluation
 # ============================================================
+
 
 def generate_answer_feedback(question, correct_answer):
 
