@@ -1,0 +1,493 @@
+/* =========================================================
+   EVALUATING PAGE
+   ========================================================= */
+
+.evaluating-page {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #faf9fe;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.evaluating-main {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 50px 24px;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.evaluating-card {
+    width: 100%;
+
+    max-width: 720px;
+
+    padding: 55px 50px 40px;
+
+    text-align: center;
+
+    background: white;
+
+    border: 1px solid #ebe7f5;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px rgba(70, 40, 140, 0.06);
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.evaluation-icon {
+    width: 78px;
+
+    height: 78px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 0 auto 25px;
+
+    border-radius: 50%;
+
+    background: #f1ecff;
+
+    box-shadow:
+        0 8px 25px rgba(99, 49, 223, 0.12);
+
+    animation: evaluation-float 2.5s ease-in-out infinite;
+}
+
+
+.evaluation-icon-inner {
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #6331df;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 7px 16px rgba(99, 49, 223, 0.22);
+}
+
+
+@keyframes evaluation-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.evaluating-card h1 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 28px;
+
+    font-weight: 750;
+
+    letter-spacing: -0.03em;
+}
+
+
+.evaluating-card > p {
+    max-width: 450px;
+
+    margin: 12px auto 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.evaluation-progress {
+    width: 100%;
+
+    max-width: 500px;
+
+    margin: 32px auto 0;
+}
+
+
+.evaluation-progress-track {
+    width: 100%;
+
+    height: 10px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e9e5f7;
+}
+
+
+.evaluation-progress-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6331df,
+            #8b5cf6
+        );
+
+    transition:
+        width 0.15s linear;
+
+    position: relative;
+}
+
+
+.evaluation-progress-fill::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    right: 0;
+
+    width: 70px;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.45),
+            transparent
+        );
+
+    animation: progress-shine 1.5s linear infinite;
+}
+
+
+@keyframes progress-shine {
+
+    from {
+        transform: translateX(-70px);
+    }
+
+    to {
+        transform: translateX(70px);
+    }
+
+}
+
+
+.evaluation-progress-percentage {
+    margin-top: 9px;
+
+    color: #6331df;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   STEPS
+   ========================================================= */
+
+.evaluation-steps {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    max-width: 620px;
+
+    margin: 38px auto 0;
+}
+
+
+.evaluation-step {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+/* =========================================================
+   STEP CONNECTOR
+   ========================================================= */
+
+.evaluation-step:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    top: 16px;
+
+    left: calc(50% + 18px);
+
+    width: calc(100% - 36px);
+
+    height: 2px;
+
+    background: #e4e1ed;
+
+    z-index: 0;
+}
+
+
+/* =========================================================
+   STEP CIRCLE
+   ========================================================= */
+
+.evaluation-step-circle {
+    position: relative;
+
+    z-index: 1;
+
+    width: 33px;
+
+    height: 33px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 2px solid #ddd9e9;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color: #6331df;
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.evaluation-step-active {
+    border-color: #6331df;
+
+    background: white;
+
+    color: #6331df;
+
+    box-shadow:
+        0 0 0 5px rgba(99, 49, 223, 0.08);
+}
+
+
+.evaluation-step-completed {
+    border-color: #6331df;
+
+    background: #6331df;
+
+    color: white;
+}
+
+
+/* =========================================================
+   STEP LABEL
+   ========================================================= */
+
+.evaluation-step-label {
+    max-width: 120px;
+
+    color: #9a98a5;
+
+    font-size: 10px;
+
+    font-weight: 500;
+
+    line-height: 1.3;
+}
+
+
+.evaluation-step-label-active {
+    color: #6331df;
+
+    font-weight: 700;
+}
+
+
+.evaluation-step-label-completed {
+    color: #6331df;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.evaluation-message {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    margin-top: 40px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #eeeaf5;
+
+    color: #8a8894;
+
+    font-size: 11px;
+
+    font-weight: 500;
+}
+
+
+.evaluation-check {
+    width: 23px;
+
+    height: 23px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #6331df;
+
+    color: white;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .evaluating-main {
+        padding:
+            30px 15px;
+    }
+
+
+    .evaluating-card {
+        padding:
+            40px 20px 30px;
+    }
+
+
+    .evaluating-card h1 {
+        font-size: 24px;
+    }
+
+
+    .evaluating-card > p {
+        font-size: 13px;
+    }
+
+
+    .evaluation-steps {
+        gap: 3px;
+    }
+
+
+    .evaluation-step:not(:last-child)::after {
+        left: calc(50% + 15px);
+
+        width: calc(100% - 30px);
+    }
+
+
+    .evaluation-step-circle {
+        width: 30px;
+
+        height: 30px;
+    }
+
+
+    .evaluation-step-label {
+        max-width: 70px;
+
+        font-size: 8px;
+    }
+
+
+    .evaluation-message {
+        font-size: 10px;
+    }
+
+}
