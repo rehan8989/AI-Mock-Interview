@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import {
     ArrowLeft,
     ArrowRight,
     Check,
+    Clock3,
     MessageSquare,
 } from "lucide-react";
 
@@ -42,6 +43,59 @@ function Interview() {
 
     const [evaluationComplete, setEvaluationComplete] =
         useState(false);
+
+    // Timer
+    const [elapsedSeconds, setElapsedSeconds] =
+        useState(0);
+
+
+    // =========================================================
+    // INTERVIEW TIMER
+    // =========================================================
+
+    useEffect(() => {
+
+        // Do not start timer if interview doesn't exist
+        if (!interview) {
+            return;
+        }
+
+        const timer = setInterval(() => {
+
+            setElapsedSeconds(
+                (previousSeconds) =>
+                    previousSeconds + 1
+            );
+
+        }, 1000);
+
+
+        // Cleanup timer when leaving interview
+        return () => {
+
+            clearInterval(timer);
+
+        };
+
+    }, [interview]);
+
+
+    // =========================================================
+    // FORMAT TIMER
+    // =========================================================
+
+    const formatTime = (seconds) => {
+
+        const minutes =
+            Math.floor(seconds / 60);
+
+        const remainingSeconds =
+            seconds % 60;
+
+        return `${String(minutes).padStart(2, "0")}:${String(
+            remainingSeconds
+        ).padStart(2, "0")}`;
+    };
 
 
     // =========================================================
@@ -207,6 +261,12 @@ function Interview() {
             );
 
 
+            console.log(
+                "Time taken:",
+                formatTime(elapsedSeconds)
+            );
+
+
             // -------------------------------------------------
             // Show evaluation screen
             // -------------------------------------------------
@@ -276,11 +336,16 @@ function Interview() {
                 "/results",
                 {
                     state: {
+
                         results:
                             response.data,
 
                         interview:
                             interview,
+
+                        elapsedSeconds:
+                            elapsedSeconds,
+
                     },
                 }
             );
@@ -352,6 +417,11 @@ function Interview() {
 
                     <header className="interview-header">
 
+
+                        {/* -------------------------------------
+                            BRAND
+                        ------------------------------------- */}
+
                         <div className="mockai-brand">
 
                             <div className="mockai-logo">
@@ -379,12 +449,40 @@ function Interview() {
                         </div>
 
 
-                        <div className="interview-counter">
+                        {/* -------------------------------------
+                            TIMER + QUESTION COUNTER
+                        ------------------------------------- */}
 
-                            Interview{" "}
-                            {currentQuestion + 1}{" "}
-                            /{" "}
-                            {totalQuestions}
+                        <div className="interview-header-right">
+
+
+                            {/* TIMER */}
+
+                            <div className="interview-timer">
+
+                                <Clock3
+                                    size={15}
+                                />
+
+                                <span>
+                                    {formatTime(
+                                        elapsedSeconds
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            {/* QUESTION COUNTER */}
+
+                            <div className="interview-counter">
+
+                                Interview{" "}
+                                {currentQuestion + 1}{" "}
+                                /{" "}
+                                {totalQuestions}
+
+                            </div>
 
                         </div>
 
@@ -421,6 +519,7 @@ function Interview() {
                     ========================================= */}
 
                     <main className="question-content">
+
 
                         <div className="question-number">
 
@@ -476,6 +575,7 @@ function Interview() {
                                             }`}
                                         >
 
+
                                             <div
                                                 className={`option-letter ${
                                                     selected
@@ -505,8 +605,11 @@ function Interview() {
 
                                             </span>
 
+
                                         </button>
+
                                     );
+
                                 }
                             )}
 
@@ -599,9 +702,11 @@ function Interview() {
 
                             </button>
 
+
                         </div>
 
                     </footer>
+
 
                 </div>
 
@@ -635,6 +740,7 @@ function Interview() {
                 </div>
 
             </section>
+
 
         </div>
     );
