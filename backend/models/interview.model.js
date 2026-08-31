@@ -42,10 +42,10 @@ const questionSchema = new mongoose.Schema({
 
 const interviewSchema = new Schema(
   {
-    userID: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: false,
+      required: true,
     },
 
     jobDescription: {
@@ -64,6 +64,12 @@ const interviewSchema = new Schema(
       type: Number,
       default: 0,
     },
+
+    isCompleted: {
+    type: Boolean,
+    default: false,
+},
+
 
     overallFeedback: {
       type: String,

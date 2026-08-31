@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import urlRouter from "./routes/system.routes.js";
 import interviewRouter from "./routes/interview.routes.js";
 import {connectMongoDB} from "./config/database.js"; 
+import authRouter from "./routes/auth.routes.js";
+import authMiddleware from "./middleware/auth.middleware.js";
 
 dotenv.config();
 
@@ -13,9 +15,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // Routes
 app.use(urlRouter);
 app.use(interviewRouter);
+app.use("/api/auth", authRouter);
 
 
 const PORT = process.env.PORT || 5000;

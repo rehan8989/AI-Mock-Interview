@@ -2,7 +2,7 @@ import axios from "axios";
 import Interview from "../models/interview.model.js";
 
 export const generateInterview = async (data) => {
-  const { jobDescription } = data;
+  const { jobDescription, userId } = data;
 
   // Send the job description to the Python AI service
   const aiResponse = await axios.post("http://localhost:8000/generate", {
@@ -11,9 +11,12 @@ export const generateInterview = async (data) => {
 
   // Get the data returned by Python
   const { skills, questions } = aiResponse.data;
+  console.log("AI skills:", skills);
+  console.log("AI questions:", questions);
 
   // Save the generated assessment in MongoDB
   const interview = await Interview.create({
+    userId: userId,
     jobDescription,
     extractedSkills: skills,
 
@@ -32,13 +35,17 @@ export const generateInterview = async (data) => {
 };
 
 export const evaluateInterview = async (data) => {
-  const { interviewId, answers } = data;
+  const { interviewId, answers,userId } = data;
 
   const interview = await Interview.findById(interviewId);
 
   if (!interview) {
     throw new Error("Interview not found");
   }
+
+  if (interview.userId.toString() !== userId) {
+    throw new Error("You are not authorized to evaluate this interview");
+}
 
   let totalScore = 0;
 
@@ -66,6 +73,7 @@ export const evaluateInterview = async (data) => {
   }
 
   interview.totalScore = totalScore;
+  interview.isCompleted = true;
 
   await interview.save();
 
@@ -77,10 +85,13 @@ export const evaluateInterview = async (data) => {
   };
 };
 
-export const getInterviewHistory = async () => {
-  const interviews = await Interview.find().sort({ createdAt: -1 });
+export const getInterviewHistory = async (userId) => {
+  const interviews = await Interview.find({
+    userId: userId,
+    isCompleted: true,
+  }).sort({ createdAt: -1 });
   return {
-    success:true,
+    success: true,
     interviews,
   };
 };
