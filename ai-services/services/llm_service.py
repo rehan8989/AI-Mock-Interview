@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
+
 # ============================================================
 # 1. Environment Setup
 # ============================================================
@@ -18,7 +19,10 @@ load_dotenv()
 
 class JobSkills(BaseModel):
     skills: list[str] = Field(
-        description="Important skills, competencies, technologies, tools, and knowledge areas required for the job"
+        description=(
+            "Important skills, competencies, technologies, tools, "
+            "and knowledge areas required for the job"
+        )
     )
 
 
@@ -37,7 +41,9 @@ class MCQResponse(BaseModel):
 
 class AnswerFeedback(BaseModel):
     feedback: str = Field(
-        description="A short explanation of why the correct answer is correct"
+        description=(
+            "A short explanation of why the correct answer is correct"
+        )
     )
 
 
@@ -56,11 +62,21 @@ llm = ChatOpenAI(
 # 4. Structured LLMs
 # ============================================================
 
-structured_llm = llm.with_structured_output(JobSkills, method="json_schema")
+structured_llm = llm.with_structured_output(
+    JobSkills,
+    method="json_schema"
+)
 
-mcq_llm = llm.with_structured_output(MCQResponse, method="json_schema")
+mcq_llm = llm.with_structured_output(
+    MCQResponse,
+    method="json_schema"
+)
 
-feedback_llm = llm.with_structured_output(AnswerFeedback, method="json_schema")
+feedback_llm = llm.with_structured_output(
+    AnswerFeedback,
+    method="json_schema"
+)
+
 
 # ============================================================
 # 5. Analyze Job Description
@@ -111,6 +127,7 @@ Job Description:
 # 6. Generate MCQs
 # ============================================================
 
+
 def generate_mcqs(job_description, skills):
 
     prompt = f"""
@@ -131,12 +148,19 @@ Requirements:
 - The questions may be technical or non-technical depending on the role.
 - Do not introduce unrelated technologies, programming languages,
   databases, or technical concepts.
+
+MCQ Requirements:
+
 - Each question must have exactly 4 options.
 - Only one option must be correct.
-- The correctAnswer MUST be exactly one of the 4 options.
+- First create the 4 options.
+- Then select exactly one of those 4 options as the correct answer.
+- Copy the selected option EXACTLY into correctAnswer.
+- correctAnswer MUST be exactly one of the 4 options.
 - correctAnswer MUST NOT be the question text.
-- correctAnswer MUST match the selected option exactly, including wording.
-- Do not modify or paraphrase the correct answer after selecting it.
+- Do not modify, paraphrase, summarize, or regenerate correctAnswer
+  after selecting the option.
+- correctAnswer must match the selected option exactly, including wording.
 - Identify which skill or competency the question tests.
 - Questions should be suitable for an actual job interview.
 - Questions should test practical understanding rather than obscure trivia.
@@ -147,16 +171,67 @@ Return exactly 5 questions.
 
     response = mcq_llm.invoke(prompt)
 
-    for question in response.questions:
-        if len(question.options) != 4:
-            raise ValueError("A question must have exactly 4 options.")
+    # ------------------------------------------------------------
+    # Validate and normalize every question
+    # ------------------------------------------------------------
 
-        if question.correctAnswer not in question.options:
+    for question in response.questions:
+
+        # --------------------------------------------------------
+        # Validate exactly 4 options
+        # --------------------------------------------------------
+
+        if len(question.options) != 4:
             raise ValueError(
-                f"Correct answer is not one of the options: {question.question}"
+                f"A question must have exactly 4 options: "
+                f"{question.question}"
             )
 
+        # --------------------------------------------------------
+        # Remove accidental whitespace
+        # --------------------------------------------------------
+
+        question.options = [
+            option.strip()
+            for option in question.options
+        ]
+
+        question.correctAnswer = (
+            question.correctAnswer.strip()
+        )
+
+        # --------------------------------------------------------
+        # Make sure correctAnswer matches an option
+        # --------------------------------------------------------
+
+        if question.correctAnswer not in question.options:
+
+            # Try case-insensitive matching
+            matching_option = next(
+                (
+                    option
+                    for option in question.options
+                    if option.lower()
+                    == question.correctAnswer.lower()
+                ),
+                None
+            )
+
+            if matching_option:
+
+                # Use the exact option text
+                # as the correct answer
+                question.correctAnswer = matching_option
+
+            else:
+
+                raise ValueError(
+                    "Correct answer is not one of the options: "
+                    f"{question.question}"
+                )
+
     return response.questions
+
 
 # ============================================================
 # 7. Answer Evaluation
@@ -175,6 +250,7 @@ Correct Answer:
 {correct_answer}
 
 Requirements:
+
 - Give a short explanation.
 - Explain the concept or reasoning behind the correct answer.
 - Keep the explanation easy to understand.

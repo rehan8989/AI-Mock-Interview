@@ -7,13 +7,15 @@ import {
     Home,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [isProfileOpen, setIsProfileOpen] =
-        useState(false);
+    const { logout } = useAuth();
+
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
 
     const dropdownRef = useRef(null);
 
@@ -23,6 +25,7 @@ function Navbar() {
 
     const isAssessmentActive =
         location.pathname === "/interview";
+
 
     // ---------------------------------------------
     // Close dropdown when clicking outside
@@ -51,21 +54,23 @@ function Navbar() {
         };
     }, []);
 
+
     // ---------------------------------------------
     // Home
     // ---------------------------------------------
 
     const handleHome = () => {
-    if (isAssessmentActive) {
-        window.alert(
-            "Please finish the assessment first."
-        );
+        if (isAssessmentActive) {
+            window.alert(
+                "Please finish the assessment first."
+            );
 
-        return;
-    }
+            return;
+        }
 
-    navigate("/");
-};
+        navigate("/");
+    };
+
 
     // ---------------------------------------------
     // History
@@ -77,6 +82,7 @@ function Navbar() {
         navigate("/history");
     };
 
+
     // ---------------------------------------------
     // Profile
     // ---------------------------------------------
@@ -87,6 +93,7 @@ function Navbar() {
         navigate("/profile");
     };
 
+
     // ---------------------------------------------
     // Logout
     // ---------------------------------------------
@@ -94,18 +101,14 @@ function Navbar() {
     const handleLogout = () => {
         setIsProfileOpen(false);
 
-        // Authentication will be implemented later.
-        // For now this is only the UI behavior.
+        logout();
 
-        console.log("Logout clicked");
-
-        // Later:
-        // localStorage.removeItem("token");
-        // navigate("/login");
+        navigate("/login");
     };
 
+
     return (
-        <header className="border-b border-violet-100 bg-white/90 backdrop-blur">
+        <header className="relative z-50 border-b border-violet-100 bg-white/90 backdrop-blur">
 
             <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
 
@@ -120,14 +123,13 @@ function Navbar() {
                 >
 
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-lg font-bold text-white shadow-md shadow-violet-200">
-
                         M
-
                     </div>
 
                     <span className="text-xl font-bold tracking-tight text-gray-900">
 
                         Mock
+
                         <span className="text-violet-600">
                             AI
                         </span>
@@ -223,15 +225,11 @@ function Navbar() {
                         }
                         className="flex items-center gap-2"
                         aria-label="Open profile menu"
-                        aria-expanded={
-                            isProfileOpen
-                        }
+                        aria-expanded={isProfileOpen}
                     >
 
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-500 font-semibold text-white shadow-sm">
-
                             R
-
                         </div>
 
                         <ChevronDown
@@ -250,7 +248,7 @@ function Navbar() {
 
                     {isProfileOpen && (
 
-                        <div className="absolute right-0 top-14 z-50 w-56 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl shadow-gray-200/50">
+                        <div className="absolute right-0 top-12 z-[100] w-56 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl shadow-gray-200/50">
 
                             {/* User info */}
 
@@ -271,15 +269,11 @@ function Navbar() {
 
                             <button
                                 type="button"
-                                onClick={
-                                    handleProfile
-                                }
+                                onClick={handleProfile}
                                 className="flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-gray-600 transition hover:bg-violet-50 hover:text-violet-600"
                             >
 
-                                <UserCircle
-                                    size={17}
-                                />
+                                <UserCircle size={17} />
 
                                 Profile
 
@@ -290,15 +284,11 @@ function Navbar() {
 
                             <button
                                 type="button"
-                                onClick={
-                                    handleHistory
-                                }
+                                onClick={handleHistory}
                                 className="flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-gray-600 transition hover:bg-violet-50 hover:text-violet-600"
                             >
 
-                                <History
-                                    size={17}
-                                />
+                                <History size={17} />
 
                                 Interview History
 
@@ -314,15 +304,11 @@ function Navbar() {
 
                             <button
                                 type="button"
-                                onClick={
-                                    handleLogout
-                                }
+                                onClick={handleLogout}
                                 className="flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-red-500 transition hover:bg-red-50"
                             >
 
-                                <LogOut
-                                    size={17}
-                                />
+                                <LogOut size={17} />
 
                                 Logout
 

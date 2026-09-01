@@ -5,35 +5,78 @@ import JobDescription from "./pages/JobDescription";
 import Interview from "./pages/Interview";
 import Generating from "./pages/Generating";
 import Results from "./pages/Results";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
 
+                {/* =================================
+                    PUBLIC ROUTES
+                ================================= */}
+
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+
+                {/* =================================
+                    PROTECTED ROUTES
+                ================================= */}
+
                 <Route
                     path="/"
-                    element={<Home />}
+                    element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/job-description"
-                    element={<JobDescription />}
+                    element={
+                        <ProtectedRoute>
+                            <JobDescription />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/generating"
-                    element={<Generating />}
+                    element={
+                        <ProtectedRoute>
+                            <Generating />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/interview"
-                    element={<Interview />}
+                    element={
+                        <ProtectedRoute>
+                            <Interview />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/results"
-                    element={<Results />}
+                    element={
+                        <ProtectedRoute>
+                            <Results />
+                        </ProtectedRoute>
+                    }
                 />
 
             </Routes>

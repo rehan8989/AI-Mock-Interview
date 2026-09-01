@@ -1,0 +1,1144 @@
+/* ========================================
+   REGISTER PAGE
+======================================== */
+
+.register-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+
+    background: #ffffff;
+    color: #10162a;
+
+    overflow-x: hidden;
+}
+
+
+/* ========================================
+   LEFT SIDE
+======================================== */
+
+.register-left {
+    width: 38%;
+
+    min-height: 100vh;
+
+    padding: clamp(25px, 3vw, 55px);
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-right: 1px solid #eeeeF5;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 255, 255, 0.9),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #faf8ff 0%,
+            #f5f0ff 50%,
+            #f9f7ff 100%
+        );
+}
+
+
+/* ========================================
+   LEFT DECORATION
+======================================== */
+
+.register-left::after {
+    content: "";
+
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    left: -300px;
+    top: 330px;
+
+    border-radius: 50%;
+
+    background: rgba(124, 77, 255, 0.035);
+
+    pointer-events: none;
+}
+
+
+/* ========================================
+   BRAND
+======================================== */
+
+.register-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: clamp(25px, 2vw, 30px);
+
+    font-weight: 700;
+
+    letter-spacing: -1.3px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.register-brand > span span {
+    color: #5225df;
+}
+
+
+/* ========================================
+   AI LOGO
+======================================== */
+
+.brand-icon {
+    width: clamp(38px, 3vw, 44px);
+    height: clamp(38px, 3vw, 44px);
+
+    border: 4px solid #5125dc;
+
+    border-radius: 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #5125dc;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    position: relative;
+}
+
+
+.brand-icon::after {
+    content: "";
+
+    position: absolute;
+
+    width: 9px;
+    height: 9px;
+
+    bottom: -6px;
+    left: 4px;
+
+    background: #f8f5ff;
+
+    border-left: 4px solid #5125dc;
+    border-bottom: 4px solid #5125dc;
+
+    transform: skewY(-35deg);
+}
+
+
+/* ========================================
+   LEFT CONTENT
+======================================== */
+
+.register-left-content {
+    margin-top: clamp(45px, 7vh, 90px);
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.register-left-content h1 {
+    margin: 0;
+
+    font-size: clamp(30px, 3vw, 42px);
+
+    line-height: 1.15;
+
+    letter-spacing: -1.7px;
+
+    font-weight: 700;
+}
+
+
+.register-left-content h1 span {
+    color: #5225df;
+}
+
+
+.register-left-content p {
+    margin-top: 16px;
+
+    margin-bottom: 0;
+
+    font-size: clamp(14px, 1.2vw, 17px);
+
+    line-height: 1.6;
+
+    color: #5d6686;
+}
+
+
+/* ========================================
+   ILLUSTRATION
+======================================== */
+
+.register-illustration {
+    display: block;
+
+    width: min(90%, 390px);
+
+    max-height: 45vh;
+
+    height: auto;
+
+    object-fit: contain;
+
+    margin: clamp(15px, 2vh, 25px) auto 0;
+
+    position: relative;
+
+    z-index: 2;
+
+    mix-blend-mode: multiply;
+}
+
+
+/* ========================================
+   COPYRIGHT
+======================================== */
+
+.register-copyright {
+    margin-top: auto;
+
+    font-size: clamp(11px, 1vw, 13px);
+
+    color: #5d6686;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* ========================================
+   RIGHT SIDE
+======================================== */
+
+.register-right {
+    width: 62%;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    /*
+       Horizontal breathing room.
+    */
+    padding: 35px clamp(35px, 6vw, 100px);
+
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle at 75% 15%,
+            rgba(91, 42, 224, 0.055),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 20% 90%,
+            rgba(91, 42, 224, 0.035),
+            transparent 25%
+        ),
+        #ffffff;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* ========================================
+   RIGHT DECORATION
+======================================== */
+
+.register-right::before {
+    content: "✦";
+
+    position: absolute;
+
+    top: 8%;
+    right: 7%;
+
+    font-size: 22px;
+
+    color: rgba(82, 37, 223, 0.18);
+
+    transform: rotate(12deg);
+
+    pointer-events: none;
+}
+
+
+.register-right::after {
+    content: "✦";
+
+    position: absolute;
+
+    bottom: 9%;
+    left: 7%;
+
+    font-size: 16px;
+
+    color: rgba(82, 37, 223, 0.12);
+
+    transform: rotate(-15deg);
+
+    pointer-events: none;
+}
+
+
+/* ========================================
+   FORM CONTAINER
+======================================== */
+
+.register-form-container {
+    width: 100%;
+
+    max-width: 590px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* ========================================
+   HEADING
+======================================== */
+
+.register-heading {
+    position: relative;
+}
+
+
+.register-heading::before {
+    content: "✦  GET STARTED";
+
+    display: inline-block;
+
+    margin-bottom: 7px;
+
+    color: #5225df;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.4px;
+}
+
+
+.register-heading h2 {
+    margin: 0;
+
+    font-size: clamp(28px, 3vw, 36px);
+
+    line-height: 1.1;
+
+    letter-spacing: -1.3px;
+
+    font-weight: 700;
+
+    color: #10162a;
+}
+
+
+.register-heading p {
+    margin: 7px 0 20px;
+
+    font-size: clamp(15px, 1.3vw, 18px);
+
+    color: #5d6686;
+}
+
+
+/* ========================================
+   FORM
+======================================== */
+
+.register-form {
+    width: 100%;
+}
+
+
+.form-group {
+    margin-bottom: clamp(10px, 1.5vh, 15px);
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: clamp(13px, 1.1vw, 15px);
+
+    font-weight: 650;
+
+    color: #111827;
+}
+
+
+/* ========================================
+   INPUT
+======================================== */
+
+.input-wrapper {
+    width: 100%;
+
+    height: clamp(48px, 5vh, 55px);
+
+    padding: 0 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border: 1px solid #d8dce8;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(25, 20, 60, 0.025);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.input-wrapper svg {
+    flex-shrink: 0;
+
+    color: #66708e;
+
+    stroke-width: 1.7;
+
+    transition: color 0.2s ease;
+}
+
+
+.input-wrapper:focus-within {
+    border-color: #6534e6;
+
+    box-shadow:
+        0 0 0 3px rgba(101, 52, 230, 0.08),
+        0 5px 15px rgba(82, 37, 223, 0.06);
+
+    transform: translateY(-1px);
+}
+
+
+.input-wrapper:focus-within svg {
+    color: #5225df;
+}
+
+
+.input-wrapper input {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 100%;
+
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    font-size: clamp(14px, 1.15vw, 16px);
+
+    color: #18203a;
+}
+
+
+.input-wrapper input::placeholder {
+    color: #69728f;
+}
+
+
+/* ========================================
+   PASSWORD TOGGLE
+======================================== */
+
+.password-toggle {
+    border: none;
+
+    background: transparent;
+
+    padding: 3px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    color: #69728f;
+
+    transition: color 0.2s ease;
+}
+
+
+.password-toggle:hover {
+    color: #5225df;
+}
+
+
+/* ========================================
+   PASSWORD HINT
+======================================== */
+
+.password-hint {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 12px;
+
+    color: #68728f;
+}
+
+
+/* ========================================
+   CREATE ACCOUNT BUTTON
+======================================== */
+
+.create-account-button {
+    width: 100%;
+
+    height: clamp(48px, 5vh, 53px);
+
+    margin-top: 2px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #5120e5 0%,
+            #4c1bd5 100%
+        );
+
+    color: #ffffff;
+
+    font-size: clamp(15px, 1.3vw, 17px);
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(82, 37, 223, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.create-account-button:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #5b28ef 0%,
+            #5120df 100%
+        );
+
+    box-shadow:
+        0 9px 22px rgba(82, 37, 223, 0.25);
+
+    transform: translateY(-1px);
+}
+
+
+.create-account-button:active {
+    transform: translateY(0);
+}
+
+
+/* ========================================
+   DIVIDER
+======================================== */
+
+.register-divider {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    margin: clamp(10px, 1.5vh, 14px) 0;
+}
+
+
+.register-divider span {
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #dfe2ea
+        );
+}
+
+
+.register-divider span:last-child {
+    background:
+        linear-gradient(
+            90deg,
+            #dfe2ea,
+            transparent
+        );
+}
+
+
+.register-divider p {
+    margin: 0;
+
+    color: #7a8197;
+
+    font-size: 13px;
+
+    font-weight: 500;
+}
+
+
+/* ========================================
+   GOOGLE BUTTON
+======================================== */
+
+.google-button {
+    width: 100%;
+
+    height: clamp(48px, 5vh, 53px);
+
+    border: 1px solid #d8dce8;
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    font-size: clamp(14px, 1.2vw, 16px);
+
+    font-weight: 600;
+
+    color: #111827;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 8px rgba(25, 20, 60, 0.025);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.google-button:hover {
+    background: #ffffff;
+
+    border-color: #c9cdd9;
+
+    box-shadow:
+        0 5px 14px rgba(25, 20, 60, 0.07);
+
+    transform: translateY(-1px);
+}
+
+
+/* ========================================
+   GOOGLE LOGO
+======================================== */
+
+.google-logo {
+    font-size: 20px;
+
+    font-weight: 700;
+
+    font-family: Arial, sans-serif;
+
+    background: conic-gradient(
+        from -45deg,
+        #4285f4 0deg 90deg,
+        #34a853 90deg 180deg,
+        #fbbc05 180deg 270deg,
+        #ea4335 270deg 360deg
+    );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* ========================================
+   LOGIN LINK
+======================================== */
+
+.login-link {
+    margin: clamp(10px, 1.5vh, 14px) 0 0;
+
+    text-align: center;
+
+    color: #68728f;
+
+    font-size: clamp(13px, 1.1vw, 15px);
+}
+
+
+.login-link a {
+    color: #5225df;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+}
+
+
+.login-link a:hover {
+    color: #3f17c2;
+
+    text-decoration: underline;
+}
+
+
+/* ========================================
+   LAPTOP
+======================================== */
+
+@media (max-width: 1200px) {
+
+    .register-left {
+        width: 40%;
+
+        padding-left: 35px;
+        padding-right: 35px;
+    }
+
+
+    .register-right {
+        width: 60%;
+
+        padding-left: 55px;
+        padding-right: 55px;
+    }
+
+
+    .register-left-content {
+        margin-top: 55px;
+    }
+
+
+    .register-left-content h1 {
+        font-size: 34px;
+    }
+
+
+    .register-illustration {
+        width: min(95%, 350px);
+
+        max-height: 42vh;
+    }
+}
+
+
+/* ========================================
+   SMALL LAPTOP
+======================================== */
+
+@media (max-width: 1000px) {
+
+    .register-left {
+        width: 37%;
+
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+
+    .register-right {
+        width: 63%;
+
+        padding-left: 45px;
+        padding-right: 45px;
+    }
+
+
+    .register-left-content h1 {
+        font-size: 30px;
+    }
+
+
+    .register-left-content p {
+        font-size: 14px;
+    }
+
+
+    .register-illustration {
+        width: min(100%, 320px);
+    }
+
+
+    .register-heading h2 {
+        font-size: 31px;
+    }
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 800px) {
+
+    .register-page {
+        display: block;
+
+        min-height: 100vh;
+
+        overflow-x: hidden;
+    }
+
+
+    /* LEFT BECOMES TOP */
+
+    .register-left {
+        width: 100%;
+
+        min-height: auto;
+
+        height: auto;
+
+        padding: 30px 35px 35px;
+
+        border-right: none;
+
+        border-bottom: 1px solid #eeeeF5;
+    }
+
+
+    .register-left-content {
+        margin-top: 40px;
+    }
+
+
+    .register-left-content h1 {
+        font-size: 36px;
+    }
+
+
+    .register-left-content p {
+        font-size: 16px;
+    }
+
+
+    .register-illustration {
+        width: min(100%, 380px);
+
+        max-height: none;
+
+        margin: 20px auto 0;
+    }
+
+
+    .register-copyright {
+        margin-top: 25px;
+    }
+
+
+    /* RIGHT */
+
+    .register-right {
+        width: 100%;
+
+        min-height: auto;
+
+        height: auto;
+
+        padding: 55px 35px 65px;
+
+        overflow: visible;
+    }
+
+
+    .register-form-container {
+        width: min(100%, 600px);
+    }
+
+
+    .register-heading h2 {
+        font-size: 34px;
+    }
+
+
+    .register-heading p {
+        font-size: 17px;
+    }
+
+
+    .register-right::before,
+    .register-right::after {
+        display: none;
+    }
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 600px) {
+
+    .register-left {
+        padding: 25px 22px 30px;
+    }
+
+
+    .register-brand {
+        font-size: 27px;
+    }
+
+
+    .brand-icon {
+        width: 41px;
+        height: 41px;
+
+        border-width: 3px;
+    }
+
+
+    .register-left-content {
+        margin-top: 35px;
+    }
+
+
+    .register-left-content h1 {
+        font-size: 32px;
+
+        letter-spacing: -1px;
+    }
+
+
+    .register-left-content p {
+        font-size: 15px;
+
+        line-height: 1.6;
+    }
+
+
+    .register-illustration {
+        width: min(100%, 340px);
+
+        margin-top: 15px;
+    }
+
+
+    .register-right {
+        padding: 40px 22px 55px;
+    }
+
+
+    .register-heading::before {
+        font-size: 10px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .register-heading h2 {
+        font-size: 30px;
+
+        letter-spacing: -1px;
+    }
+
+
+    .register-heading p {
+        font-size: 16px;
+
+        margin-bottom: 24px;
+    }
+
+
+    .form-group {
+        margin-bottom: 17px;
+    }
+
+
+    .form-group label {
+        font-size: 14px;
+    }
+
+
+    .input-wrapper {
+        height: 55px;
+    }
+
+
+    .input-wrapper input {
+        font-size: 15px;
+    }
+
+
+    .create-account-button {
+        height: 53px;
+
+        font-size: 16px;
+    }
+
+
+    .google-button {
+        height: 53px;
+
+        font-size: 15px;
+    }
+
+
+    .login-link {
+        font-size: 14px;
+    }
+}
+
+
+/* ========================================
+   SMALL MOBILE
+======================================== */
+
+@media (max-width: 400px) {
+
+    .register-left {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+
+    .register-left-content h1 {
+        font-size: 29px;
+    }
+
+
+    .register-left-content p {
+        font-size: 14px;
+    }
+
+
+    .register-illustration {
+        width: 100%;
+    }
+
+
+    .register-right {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+
+    .register-heading h2 {
+        font-size: 27px;
+    }
+
+
+    .register-heading p {
+        font-size: 15px;
+    }
+
+
+    .input-wrapper {
+        height: 52px;
+
+        padding-left: 13px;
+        padding-right: 13px;
+
+        gap: 11px;
+    }
+
+
+    .input-wrapper input {
+        font-size: 14px;
+    }
+
+
+    .create-account-button,
+    .google-button {
+        height: 51px;
+    }
+}   
+
+.register-error {
+    margin: -4px 0 10px;
+
+    color: #dc2626;
+
+    font-size: 13px;
+
+    font-weight: 500;
+}
+
+.create-account-button:disabled {
+    opacity: 0.7;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
