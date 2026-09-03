@@ -103,7 +103,7 @@ function Navbar() {
 
         logout();
 
-        navigate("/login");
+        navigate("/");
     };
 
 

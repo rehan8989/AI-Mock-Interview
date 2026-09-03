@@ -1,6 +1,7 @@
 import express from "express";
 import { registerUser, loginUser } from "../services/auth.service.js";
 import authMiddleware from "../middleware/auth.middleware.js";
+import {getUserProfile} from "../services/user.service.js"
 
 const router = express.Router();
 
@@ -64,4 +65,27 @@ router.get("/test", authMiddleware, (req, res) => {
         user: req.user,
     });
 });
+
+router.get(
+    "/profile",
+    authMiddleware,
+    async (req, res) => {
+        try {
+            const result = await getUserProfile(
+                req.user.userId
+            );
+
+            return res.status(200).json(result);
+        } catch (error) {
+            console.error("Profile Error:", error);
+
+            return res.status(500).json({
+                success: false,
+                message:
+                    error.message ||
+                    "Internal Server Error",
+            });
+        }
+    }
+);
 export default router;

@@ -1,14 +1,25 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { useAuth } from "./context/AuthContext";
+
 import Home from "./pages/Home";
+import GuestHome from "./pages/GuestHome";
 import JobDescription from "./pages/JobDescription";
 import Interview from "./pages/Interview";
 import Generating from "./pages/Generating";
 import Results from "./pages/Results";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import History from "./pages/History";
+import Profile from "./pages/Profile";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
+
+const HomeRoute = () => {
+    const { isAuthenticated } = useAuth();
+
+    return isAuthenticated ? <Home /> : <GuestHome />;
+};
 
 function App() {
     return (
@@ -16,8 +27,8 @@ function App() {
             <Routes>
 
                 {/* =================================
-                    PUBLIC ROUTES
-                ================================= */}
+                            PUBLIC ROUTES
+                    ================================= */}
 
                 <Route
                     path="/register"
@@ -31,17 +42,18 @@ function App() {
 
 
                 {/* =================================
-                    PROTECTED ROUTES
-                ================================= */}
+                            HOME ROUTE
+                    ================================= */}
 
                 <Route
                     path="/"
-                    element={
-                        <ProtectedRoute>
-                            <Home />
-                        </ProtectedRoute>
-                    }
+                    element={<HomeRoute />}
                 />
+
+
+                {/* =================================
+                            PROTECTED ROUTES
+                    ================================= */}
 
                 <Route
                     path="/job-description"
@@ -75,6 +87,24 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Results />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/history"
+                    element={
+                        <ProtectedRoute>
+                            <History />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
                         </ProtectedRoute>
                     }
                 />
