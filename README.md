@@ -23,6 +23,38 @@ Completed assessments are stored securely and can be accessed later through the 
 
 ---
 
+---
+
+## 📸 Screenshots
+
+### 🏠 Home
+
+![MockAI Home](docs/01-home.png)
+
+### 📄 Job Description
+
+![Job Description](docs/02-job-description.png)
+
+### 📝 Assessment
+
+![Assessment](docs/03-assessment.png)
+
+### 📊 Results Overview
+
+![Assessment Results](docs/04-results.png)
+
+### 📈 Detailed Results
+
+![Detailed Assessment Results](docs/05-results.png)
+
+### 🕘 Assessment History
+
+![Assessment History](docs/08-history.png)
+
+### 👤 Profile
+
+![User Profile](docs/09-profile.png)
+
 ## ✨ Features
 
 - 🔐 User registration and login
