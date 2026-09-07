@@ -2,7 +2,11 @@
 
 > GPT-powered mock assessment platform that generates personalized MCQs from job descriptions and provides AI-generated feedback.
 
-[Live Demo](https://ai-mock-interview-beta-six.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue)](https://ai-mock-interview-beta-six.vercel.app/)
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Backend-Node.js-339933)](https://nodejs.org/)
+[![Python](https://img.shields.io/badge/AI%20Service-Python-3776AB)](https://www.python.org/)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248)](https://www.mongodb.com/)
 
 
 ---
