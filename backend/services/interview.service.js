@@ -1,13 +1,16 @@
 import axios from "axios";
 import Interview from "../models/interview.model.js";
 
+const AI_SERVICE_URL =
+  process.env.AI_SERVICE_URL || "http://localhost:8000";
+
 export const generateInterview = async (data) => {
   const { jobDescription, userId } = data;
 
   try {
     // Send the job description to the Python AI service
     const aiResponse = await axios.post(
-      "http://localhost:8000/generate",
+      `${AI_SERVICE_URL}/generate`,
       {
         jobDescription,
       }
@@ -113,7 +116,7 @@ export const evaluateInterview = async (data) => {
     }
 
     const aiResponse = await axios.post(
-      "http://localhost:8000/feedback",
+      `${AI_SERVICE_URL}/feedback`,
       {
         question: question.questionText,
         correctAnswer: question.correctAnswer,
