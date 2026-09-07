@@ -45,7 +45,7 @@ function JobDescription() {
           </h1>
 
           <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500">
-            Paste the job description below to generate custom interview
+            Paste the job description below to generate custom Assessment
             questions.
           </p>
         </div>
@@ -80,7 +80,7 @@ function JobDescription() {
             disabled={!jobDescription.trim()}
             className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
           >
-            Generate Interview
+            Generate Assessment
             <ArrowRight size={17} />
           </button>
         </div>
@@ -93,7 +93,7 @@ function JobDescription() {
 
           <span>
             Your job description is used only to create your personalized
-            interview
+            Assessment
           </span>
         </div>
       </section>

@@ -4,38 +4,81 @@ import Interview from "../models/interview.model.js";
 export const generateInterview = async (data) => {
   const { jobDescription, userId } = data;
 
-  // Send the job description to the Python AI service
-  const aiResponse = await axios.post("http://localhost:8000/generate", {
-    jobDescription,
-  });
+  try {
+    // Send the job description to the Python AI service
+    const aiResponse = await axios.post(
+      "http://localhost:8000/generate",
+      {
+        jobDescription,
+      }
+    );
 
-  // Get the data returned by Python
-  const { skills, questions } = aiResponse.data;
-  console.log("AI skills:", skills);
-  console.log("AI questions:", questions);
+    // Get the data returned by Python
+    const { skills, questions } = aiResponse.data;
 
-  // Save the generated assessment in MongoDB
-  const interview = await Interview.create({
-    userId: userId,
-    jobDescription,
-    extractedSkills: skills,
+    console.log("AI skills:", skills);
+    console.log("AI questions:", questions);
 
-    questions: questions.map((question) => ({
-      questionText: question.question,
-      options: question.options,
-      correctAnswer: question.correctAnswer,
-      skill: question.skill,
-    })),
-  });
+    // Save the generated assessment in MongoDB
+    const interview = await Interview.create({
+      userId: userId,
+      jobDescription,
+      extractedSkills: skills,
 
-  return {
-    success: true,
-    interview,
-  };
+      questions: questions.map((question) => ({
+        questionText: question.question,
+        options: question.options,
+        correctAnswer: question.correctAnswer,
+        skill: question.skill,
+      })),
+    });
+
+    return {
+      success: true,
+      interview,
+    };
+  } catch (error) {
+    // --------------------------------------------------------
+    // Handle invalid job description from Python AI service
+    // --------------------------------------------------------
+
+    if (
+      error.response &&
+      error.response.status === 400
+    ) {
+      const validationError = new Error(
+        error.response.data?.detail ||
+        "Please enter a proper job description with enough details about the role, responsibilities, skills, tools, or requirements."
+      );
+
+      // Tell the route this is a user/input error
+      validationError.status = 400;
+
+      throw validationError;
+    }
+
+    // --------------------------------------------------------
+    // Other generation errors
+    // --------------------------------------------------------
+
+    console.error(
+      "Interview generation service error:",
+      error.message
+    );
+
+    const generationError = new Error(
+      "We couldn't generate your interview right now. Please try again."
+    );
+
+    generationError.status = 500;
+
+    throw generationError;
+  }
 };
 
+
 export const evaluateInterview = async (data) => {
-  const { interviewId, answers,userId } = data;
+  const { interviewId, answers, userId } = data;
 
   const interview = await Interview.findById(interviewId);
 
@@ -44,13 +87,17 @@ export const evaluateInterview = async (data) => {
   }
 
   if (interview.userId.toString() !== userId) {
-    throw new Error("You are not authorized to evaluate this interview");
-}
+    throw new Error(
+      "You are not authorized to evaluate this interview"
+    );
+  }
 
   let totalScore = 0;
 
   for (const answer of answers) {
-    const question = interview.questions.id(answer.questionId);
+    const question = interview.questions.id(
+      answer.questionId
+    );
 
     if (!question) {
       continue;
@@ -64,10 +111,14 @@ export const evaluateInterview = async (data) => {
     } else {
       question.score = 0;
     }
-    const aiResponse = await axios.post("http://localhost:8000/feedback", {
-      question: question.questionText,
-      correctAnswer: question.correctAnswer,
-    });
+
+    const aiResponse = await axios.post(
+      "http://localhost:8000/feedback",
+      {
+        question: question.questionText,
+        correctAnswer: question.correctAnswer,
+      }
+    );
 
     question.aiFeedback = aiResponse.data.feedback;
   }
@@ -85,11 +136,13 @@ export const evaluateInterview = async (data) => {
   };
 };
 
+
 export const getInterviewHistory = async (userId) => {
   const interviews = await Interview.find({
     userId: userId,
     isCompleted: true,
   }).sort({ createdAt: -1 });
+
   return {
     success: true,
     interviews,

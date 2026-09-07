@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { useAuth } from "./context/AuthContext";
@@ -21,9 +22,51 @@ const HomeRoute = () => {
     return isAuthenticated ? <Home /> : <GuestHome />;
 };
 
+
+// =========================================================
+// REFRESH PROTECTION
+// =========================================================
+
+const NavigationGuard = () => {
+    const { isNavigationLocked } = useAuth();
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            if (!isNavigationLocked) {
+                return;
+            }
+
+            event.preventDefault();
+
+            // Required for modern browsers to show
+            // their native "Leave site?" confirmation.
+            event.returnValue = "";
+        };
+
+        window.addEventListener(
+            "beforeunload",
+            handleBeforeUnload
+        );
+
+        return () => {
+            window.removeEventListener(
+                "beforeunload",
+                handleBeforeUnload
+            );
+        };
+    }, [isNavigationLocked]);
+
+    return null;
+};
+
+
 function App() {
     return (
         <BrowserRouter>
+
+            {/* Protect browser refresh while an operation is running */}
+            <NavigationGuard />
+
             <Routes>
 
                 {/* =================================

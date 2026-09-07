@@ -16,7 +16,7 @@ const GuestHero = () => {
           {/* Badge */}
           <div className="mb-7 inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-sm font-medium text-violet-600">
             <Rocket size={16} />
-            AI-Powered Mock Interviews
+            AI-Powered Mock Assessments
           </div>
 
           {/* Heading */}
@@ -30,7 +30,7 @@ const GuestHero = () => {
 
           {/* Description */}
           <p className="mt-7 max-w-xl text-base leading-7 text-gray-600 sm:text-lg">
-            MockAI generates personalized interview questions based on your job
+            MockAI generates personalized Assessment questions based on your job
             description and provides AI feedback to help you improve and land
             your dream job.
           </p>
@@ -59,7 +59,7 @@ const GuestHero = () => {
                         "
           >
             <Rocket size={18} />
-            Start Your Free Interview
+            Start Your Free Assessment
             <ArrowRight size={18} />
           </button>
 

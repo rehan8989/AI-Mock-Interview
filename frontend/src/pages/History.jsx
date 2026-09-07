@@ -211,11 +211,11 @@ const History = () => {
           <div className="mb-7 flex flex-col gap-5 sm:mb-8 md:flex-row md:items-end md:justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                Interview History
+                Assessment History
               </h1>
 
               <p className="mt-2 max-w-xl text-sm leading-6 text-gray-500">
-                Review your previous interviews and track your interview
+                Review your previous Assessments and track your Assessment
                 preparation progress.
               </p>
             </div>
@@ -238,7 +238,7 @@ const History = () => {
                                 sm:w-auto
                             "
             >
-              + Start New Interview
+              + Start New Assessment
             </button>
           </div>
 
@@ -338,11 +338,11 @@ const History = () => {
               </div>
 
               <h2 className="mt-5 text-lg font-semibold text-gray-900">
-                No interviews yet
+                No Assessments yet
               </h2>
 
               <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">
-                Complete your first mock interview and your results will appear
+                Complete your first mock Assessment and your results will appear
                 here.
               </p>
 
@@ -362,7 +362,7 @@ const History = () => {
                                         hover:bg-purple-700
                                     "
               >
-                Start Your First Interview
+                Start Your First Assessment
               </button>
             </div>
           )}

@@ -46,15 +46,15 @@ function Results() {
           <h1>Results Not Found</h1>
 
           <p>
-            We couldn't find the results for this interview. Please start a new
-            interview.
+            We couldn't find the results for this Assessment. Please start a new
+            Assessment.
           </p>
 
           <button
             type="button"
             onClick={() => navigate("/job-description")}
           >
-            Start New Interview
+            Start New Assessment
           </button>
         </div>
       </div>
@@ -160,10 +160,10 @@ function Results() {
               <Check size={30} />
             </div>
 
-            <h1>Interview Completed!</h1>
+            <h1>Assessment Completed!</h1>
 
             <p>
-              Great job! Here's how you performed in your interview.
+              Great job! Here's how you performed in your Assessment.
             </p>
           </section>
 
@@ -516,7 +516,7 @@ function Results() {
               onClick={handleRetake}
             >
               <RotateCcw size={18} />
-              Retake Interview
+              Retake Assessment
             </button>
 
           </section>
@@ -538,7 +538,7 @@ function Results() {
           </div>
 
           <span>
-            Your interview results are securely stored for your review.
+            Your Assessment results are securely stored for your review.
           </span>
 
         </div>

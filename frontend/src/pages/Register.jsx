@@ -61,15 +61,13 @@ const Register = () => {
             if (response.data.success) {
                 navigate("/login");
             }
-
         } catch (error) {
             console.error("Registration Error:", error);
 
             setError(
                 error.response?.data?.message ||
-                "Registration failed. Please try again."
+                    "Registration failed. Please try again."
             );
-
         } finally {
             setLoading(false);
         }
@@ -78,259 +76,306 @@ const Register = () => {
     return (
         <div className="register-page">
 
-            {/* LEFT SIDE */}
-            <section className="register-left">
+            {/* =========================================
+                MAIN REGISTER AREA
+            ========================================= */}
+            <div className="register-main">
 
-                <div className="register-brand">
-                    <div className="brand-icon">
-                        AI
+                {/* =====================================
+                    LEFT SIDE
+                ===================================== */}
+                <section className="register-left">
+
+                    <div className="register-brand">
+                        <div className="brand-icon">
+                            AI
+                        </div>
+
+                        <span>
+                            Mock<span>AI</span>
+                        </span>
                     </div>
 
-                    <span>
-                        Mock<span>AI</span>
-                    </span>
-                </div>
 
+                    <div className="register-left-content">
 
-                <div className="register-left-content">
-
-                    <h1>
-                        Practice Smarter.
-                        <br />
-                        Get <span>Hired.</span>
-                    </h1>
-
-                    <p>
-                        Create your account and access
-                        <br />
-                        AI-powered mock interviews,
-                        <br />
-                        personalized feedback and more.
-                    </p>
-
-                    <img
-                        src={register1}
-                        alt="MockAI interview illustration"
-                        className="register-illustration"
-                    />
-
-                </div>
-
-
-                <div className="register-copyright">
-                    © 2024 MockAI. All rights reserved.
-                </div>
-
-            </section>
-
-
-            {/* RIGHT SIDE */}
-            <section className="register-right">
-
-                <div className="register-form-container">
-
-                    <div className="register-heading">
-
-                        <h2>
-                            Create Your Account
-                        </h2>
+                        <h1>
+                            Practice Smarter.
+                            <br />
+                            Get <span>Hired.</span>
+                        </h1>
 
                         <p>
-                            Fill in the details to get started
+                            Create your account and access
+                            <br />
+                            AI-powered mock Assessments,
+                            <br />
+                            personalized feedback and more.
                         </p>
+
+                        <img
+                            src={register1}
+                            alt="MockAI Assessment illustration"
+                            className="register-illustration"
+                        />
 
                     </div>
 
-
-                    <form
-                        className="register-form"
-                        onSubmit={handleSubmit}
-                    >
-
-                        {/* NAME */}
-                        <div className="form-group">
-
-                            <label htmlFor="name">
-                                Full Name
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <UserRound size={22} />
-
-                                <input
-                                    id="name"
-                                    type="text"
-                                    placeholder="Enter your full name"
-                                    value={name}
-                                    onChange={(e) =>
-                                        setName(e.target.value)
-                                    }
-                                    required
-                                />
-
-                            </div>
-
-                        </div>
+                </section>
 
 
-                        {/* EMAIL */}
-                        <div className="form-group">
+                {/* =====================================
+                    RIGHT SIDE
+                ===================================== */}
+                <section className="register-right">
 
-                            <label htmlFor="email">
-                                Email Address
-                            </label>
+                    <div className="register-form-container">
 
-                            <div className="input-wrapper">
+                        <div className="register-heading">
 
-                                <Mail size={22} />
+                            <h2>
+                                Create Your Account
+                            </h2>
 
-                                <input
-                                    id="email"
-                                    type="email"
-                                    placeholder="Enter your email address"
-                                    value={email}
-                                    onChange={(e) =>
-                                        setEmail(e.target.value)
-                                    }
-                                    required
-                                />
-
-                            </div>
-
-                        </div>
-
-
-                        {/* PASSWORD */}
-                        <div className="form-group">
-
-                            <label htmlFor="password">
-                                Password
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <LockKeyhole size={22} />
-
-                                <input
-                                    id="password"
-                                    type={
-                                        showPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    placeholder="Create a password"
-                                    value={password}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                    required
-                                />
-
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() =>
-                                        setShowPassword(!showPassword)
-                                    }
-                                >
-                                    {showPassword ? (
-                                        <EyeOff size={21} />
-                                    ) : (
-                                        <Eye size={21} />
-                                    )}
-                                </button>
-
-                            </div>
-
-                            <span className="password-hint">
-                                Password must be at least 6 characters
-                            </span>
-
-                        </div>
-
-
-                        {/* CONFIRM PASSWORD */}
-                        <div className="form-group">
-
-                            <label htmlFor="confirmPassword">
-                                Confirm Password
-                            </label>
-
-                            <div className="input-wrapper">
-
-                                <LockKeyhole size={22} />
-
-                                <input
-                                    id="confirmPassword"
-                                    type={
-                                        showConfirmPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    placeholder="Confirm your password"
-                                    value={confirmPassword}
-                                    onChange={(e) =>
-                                        setConfirmPassword(
-                                            e.target.value
-                                        )
-                                    }
-                                    required
-                                />
-
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() =>
-                                        setShowConfirmPassword(
-                                            !showConfirmPassword
-                                        )
-                                    }
-                                >
-                                    {showConfirmPassword ? (
-                                        <EyeOff size={21} />
-                                    ) : (
-                                        <Eye size={21} />
-                                    )}
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        {/* ERROR */}
-                        {error && (
-                            <p className="register-error">
-                                {error}
+                            <p>
+                                Fill in the details to get started
                             </p>
-                        )}
+
+                        </div>
 
 
-                        {/* CREATE ACCOUNT */}
-                        <button
-                            type="submit"
-                            className="create-account-button"
-                            disabled={loading}
+                        <form
+                            className="register-form"
+                            onSubmit={handleSubmit}
                         >
-                            {loading
-                                ? "Creating Account..."
-                                : "Create Account"}
-                        </button>
+
+                            {/* =========================
+                                NAME
+                            ========================= */}
+                            <div className="form-group">
+
+                                <label htmlFor="name">
+                                    Full Name
+                                </label>
+
+                                <div className="input-wrapper">
+
+                                    <UserRound size={22} />
+
+                                    <input
+                                        id="name"
+                                        type="text"
+                                        placeholder="Enter your full name"
+                                        value={name}
+                                        onChange={(e) =>
+                                            setName(e.target.value)
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+                            </div>
 
 
-                        {/* LOGIN */}
-                        <p className="login-link">
+                            {/* =========================
+                                EMAIL
+                            ========================= */}
+                            <div className="form-group">
 
-                            Already have an account?{" "}
+                                <label htmlFor="email">
+                                    Email Address
+                                </label>
 
-                            <Link to="/login">
-                                Log in
-                            </Link>
+                                <div className="input-wrapper">
 
-                        </p>
+                                    <Mail size={22} />
 
-                    </form>
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        placeholder="Enter your email address"
+                                        value={email}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            {/* =========================
+                                PASSWORD
+                            ========================= */}
+                            <div className="form-group">
+
+                                <label htmlFor="password">
+                                    Password
+                                </label>
+
+                                <div className="input-wrapper">
+
+                                    <LockKeyhole size={22} />
+
+                                    <input
+                                        id="password"
+                                        type={
+                                            showPassword
+                                                ? "text"
+                                                : "password"
+                                        }
+                                        placeholder="Create a password"
+                                        value={password}
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
+                                        }
+                                        required
+                                    />
+
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() =>
+                                            setShowPassword(!showPassword)
+                                        }
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff size={21} />
+                                        ) : (
+                                            <Eye size={21} />
+                                        )}
+                                    </button>
+
+                                </div>
+
+                                <span className="password-hint">
+                                    Password must be at least 6 characters
+                                </span>
+
+                            </div>
+
+
+                            {/* =========================
+                                CONFIRM PASSWORD
+                            ========================= */}
+                            <div className="form-group">
+
+                                <label htmlFor="confirmPassword">
+                                    Confirm Password
+                                </label>
+
+                                <div className="input-wrapper">
+
+                                    <LockKeyhole size={22} />
+
+                                    <input
+                                        id="confirmPassword"
+                                        type={
+                                            showConfirmPassword
+                                                ? "text"
+                                                : "password"
+                                        }
+                                        placeholder="Confirm your password"
+                                        value={confirmPassword}
+                                        onChange={(e) =>
+                                            setConfirmPassword(
+                                                e.target.value
+                                            )
+                                        }
+                                        required
+                                    />
+
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() =>
+                                            setShowConfirmPassword(
+                                                !showConfirmPassword
+                                            )
+                                        }
+                                    >
+                                        {showConfirmPassword ? (
+                                            <EyeOff size={21} />
+                                        ) : (
+                                            <Eye size={21} />
+                                        )}
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            {/* =========================
+                                ERROR
+                            ========================= */}
+                            {error && (
+                                <p className="register-error">
+                                    {error}
+                                </p>
+                            )}
+
+
+                            {/* =========================
+                                CREATE ACCOUNT
+                            ========================= */}
+                            <button
+                                type="submit"
+                                className="create-account-button"
+                                disabled={loading}
+                            >
+                                {loading
+                                    ? "Creating Account..."
+                                    : "Create Account"}
+                            </button>
+
+
+                            {/* =========================
+                                LOGIN
+                            ========================= */}
+                            <p className="login-link">
+
+                                Already have an account?{" "}
+
+                                <Link to="/login">
+                                    Log in
+                                </Link>
+
+                            </p>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            {/* =========================================
+                TRUST SECTION
+            ========================================= */}
+            <section className="register-trust-section">
+
+                <div className="register-trust-content">
+
+                    <div className="register-trust-message">
+
+                        <div className="register-trust-dot" />
+
+                        <span>
+                            Built to help students and professionals
+                            prepare with confidence
+                        </span>
+
+                    </div>
+
+                    <p className="register-trust-author">
+                        Created by Rehan Waghoo
+                    </p>
 
                 </div>
 

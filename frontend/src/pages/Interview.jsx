@@ -17,6 +17,8 @@ import {
 import Navbar from "../components/common/Navbar";
 import Evaluating from "./Evaluating";
 
+import { useAuth } from "../context/AuthContext";
+
 import "./Interview.css";
 
 
@@ -25,7 +27,12 @@ function Interview() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const interview = location.state?.interview;
+    const {
+        setIsNavigationLocked,
+    } = useAuth();
+
+    const interview =
+        location.state?.interview;
 
 
     // =========================================================
@@ -93,8 +100,8 @@ function Interview() {
             seconds % 60;
 
         return `${String(minutes).padStart(2, "0")}:${String(
-            remainingSeconds
-        ).padStart(2, "0")}`;
+        remainingSeconds
+    ).padStart(2, "0")}`;
     };
 
 
@@ -113,12 +120,12 @@ function Interview() {
                 <div className="interview-error-card">
 
                     <h1>
-                        Interview Not Found
+                        Assessment Not Found
                     </h1>
 
                     <p>
-                        We couldn't find an active interview.
-                        Please generate a new interview first.
+                        We couldn't find an active Assessment.
+                        Please generate a new Assessment first.
                     </p>
 
                     <button
@@ -233,7 +240,7 @@ function Interview() {
         try {
 
             console.log(
-                "Submitting interview..."
+                "Submitting Assessment..."
             );
 
 
@@ -265,6 +272,13 @@ function Interview() {
                 "Time taken:",
                 formatTime(elapsedSeconds)
             );
+
+
+            // -------------------------------------------------
+            // Lock navigation
+            // -------------------------------------------------
+
+            setIsNavigationLocked(true);
 
 
             // -------------------------------------------------
@@ -329,6 +343,13 @@ function Interview() {
 
 
             // -------------------------------------------------
+            // Unlock navigation
+            // -------------------------------------------------
+
+            setIsNavigationLocked(false);
+
+
+            // -------------------------------------------------
             // Navigate to Results
             // -------------------------------------------------
 
@@ -350,12 +371,20 @@ function Interview() {
                 }
             );
 
+
         } catch (error) {
 
             console.error(
-                "Interview evaluation failed:",
+                "Assessment evaluation failed:",
                 error
             );
+
+
+            // -------------------------------------------------
+            // Unlock navigation after error
+            // -------------------------------------------------
+
+            setIsNavigationLocked(false);
 
 
             // -------------------------------------------------
@@ -440,6 +469,7 @@ function Interview() {
                             <span className="mockai-name">
 
                                 Mock
+
                                 <span>
                                     AI
                                 </span>
@@ -477,7 +507,7 @@ function Interview() {
 
                             <div className="interview-counter">
 
-                                Interview{" "}
+                                Questions{" "}
                                 {currentQuestion + 1}{" "}
                                 /{" "}
                                 {totalQuestions}
@@ -489,9 +519,9 @@ function Interview() {
                     </header>
 
 
-                    {/* =========================================
+                    {/* =================================================
                         QUESTION PROGRESS
-                    ========================================= */}
+                    ================================================= */}
 
                     <div className="question-progress">
 
@@ -514,9 +544,9 @@ function Interview() {
                     </div>
 
 
-                    {/* =========================================
+                    {/* =================================================
                         QUESTION CONTENT
-                    ========================================= */}
+                    ================================================= */}
 
                     <main className="question-content">
 
@@ -618,9 +648,9 @@ function Interview() {
                     </main>
 
 
-                    {/* =========================================
+                    {/* =================================================
                         FOOTER
-                    ========================================= */}
+                    ================================================= */}
 
                     <footer className="question-footer">
 
@@ -733,7 +763,7 @@ function Interview() {
                     <span>
 
                         Your answers are used only to
-                        evaluate your personalized interview
+                        evaluate your personalized Assessment
 
                     </span>
 

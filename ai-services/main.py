@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from services.llm_service import (
@@ -30,18 +30,27 @@ def health():
 @app.post("/generate")
 def generate_assessment(data: JobDescriptionRequest):
 
-    skills = analyze_job_description(data.jobDescription)
+    try:
+        skills = analyze_job_description(
+            data.jobDescription
+        )
 
-    questions = generate_mcqs(
-        data.jobDescription,
-        skills
-    )
+        questions = generate_mcqs(
+            data.jobDescription,
+            skills
+        )
 
-    return {
-        "success": True,
-        "skills": skills,
-        "questions": questions,
-    }
+        return {
+            "success": True,
+            "skills": skills,
+            "questions": questions,
+        }
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        )
 
 
 @app.post("/feedback")

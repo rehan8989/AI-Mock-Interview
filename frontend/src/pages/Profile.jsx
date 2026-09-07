@@ -258,7 +258,7 @@ const Profile = () => {
 
                                         <div>
                                             <p className="text-xs font-medium text-gray-400">
-                                                Completed Interviews
+                                                Completed Assessments
                                             </p>
 
                                             <p className="mt-1 text-xl font-semibold text-gray-900">
@@ -388,7 +388,7 @@ const Profile = () => {
                                         </h2>
 
                                         <p className="mt-1 text-sm text-gray-500">
-                                            Take another mock interview to
+                                            Take another mock Assessment to
                                             improve your preparation.
                                         </p>
                                     </div>
@@ -412,7 +412,7 @@ const Profile = () => {
                                             sm:w-auto
                                         "
                                     >
-                                        Start New Interview
+                                        Start New Assessment
                                     </button>
 
                                 </div>

@@ -8,6 +8,11 @@ export const AuthProvider = ({ children }) => {
         localStorage.getItem("token")
     );
 
+    // Prevent navigation while an interview
+    // is being generated or evaluated
+    const [isNavigationLocked, setIsNavigationLocked] =
+        useState(false);
+
     const login = (token) => {
         localStorage.setItem("token", token);
         setToken(token);
@@ -27,13 +32,14 @@ export const AuthProvider = ({ children }) => {
                 isAuthenticated,
                 login,
                 logout,
+                isNavigationLocked,
+                setIsNavigationLocked,
             }}
         >
             {children}
         </AuthContext.Provider>
     );
 };
-
 
 export const useAuth = () => {
     return useContext(AuthContext);

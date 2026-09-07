@@ -141,7 +141,7 @@ function Evaluating({ evaluationComplete = false }) {
                     ================================================= */}
 
                     <h1>
-                        Evaluating Your Interview...
+                        Evaluating Your Assessment...
                     </h1>
 
 
@@ -289,7 +289,7 @@ function Evaluating({ evaluationComplete = false }) {
 
                             {evaluationComplete
                                 ? "Evaluation complete. Preparing your results..."
-                                : "Please wait while we prepare your interview results."
+                                : "Please wait while we prepare your Assessment results."
                             }
 
                         </span>

@@ -7,6 +7,8 @@ import {
 import Navbar from "../components/common/Navbar";
 import Hero from "../components/home/Hero";
 import FeatureCard from "../components/home/FeatureCard";
+import Footer from "../components/common/Footer";
+
 
 import "./Home.css";
 
@@ -42,7 +44,7 @@ function Home() {
                         <FeatureCard
                             icon={BrainCircuit}
                             title="AI Generated Questions"
-                            description="Get interview questions generated based on the skills and requirements from your job description."
+                            description="Get Assessment questions generated based on the skills and requirements from your job description."
                         />
 
                         <FeatureCard
@@ -61,14 +63,27 @@ function Home() {
                 </section>
 
                 {/* Trust section */}
-                <section className="border-t border-violet-100 bg-violet-50/60">
+                {/* <section className="border-t border-violet-100 bg-violet-50/60">
                     <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-6 py-7 text-center text-sm font-medium text-gray-500">
                         <div className="h-2 w-2 rounded-full bg-violet-500" />
                         Built to help students and professionals prepare with confidence
                     </div>
-                </section>
+                </section> */}
+
+                 {/* Trust section */}
+        <section className="border-t border-violet-100 bg-violet-50/60">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-1 px-6 py-7 text-center">
+            <div className="flex items-center justify-center gap-3 text-sm font-medium text-gray-500">
+              <div className="h-2 w-2 rounded-full bg-violet-500" />
+              Built to help students and professionals prepare with confidence
+            </div>
+
+            <p className="text-xs text-gray-400">Created by Rehan Waghoo</p>
+          </div>
+        </section>
 
             </main>
+            
         </div>
     );
 }

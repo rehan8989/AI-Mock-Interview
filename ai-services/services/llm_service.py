@@ -1,5 +1,4 @@
 import os
-import json
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
@@ -15,6 +14,21 @@ load_dotenv()
 # ============================================================
 # 2. Pydantic Models
 # ============================================================
+
+
+class JobDescriptionValidation(BaseModel):
+    is_valid: bool = Field(
+        description=(
+            "Whether the input is a sufficiently detailed and legitimate "
+            "job description suitable for generating a professional interview"
+        )
+    )
+
+    reason: str = Field(
+        description=(
+            "A short explanation explaining why the input is valid or invalid"
+        )
+    )
 
 
 class JobSkills(BaseModel):
@@ -35,7 +49,7 @@ class MCQ(BaseModel):
 
 class MCQResponse(BaseModel):
     questions: list[MCQ] = Field(
-        description="Exactly 5 multiple-choice interview questions"
+        description="Exactly 10 multiple-choice interview questions"
     )
 
 
@@ -62,6 +76,11 @@ llm = ChatOpenAI(
 # 4. Structured LLMs
 # ============================================================
 
+job_validation_llm = llm.with_structured_output(
+    JobDescriptionValidation,
+    method="json_schema"
+)
+
 structured_llm = llm.with_structured_output(
     JobSkills,
     method="json_schema"
@@ -79,11 +98,227 @@ feedback_llm = llm.with_structured_output(
 
 
 # ============================================================
-# 5. Analyze Job Description
+# 5. Validate Job Description
+# ============================================================
+
+
+def validate_job_description(job_description):
+
+    prompt = f"""
+Determine whether the following input is a valid job description
+that can be used to create a professional job interview.
+
+The input must describe a legitimate professional role in enough
+detail to create meaningful interview questions.
+
+IMPORTANT:
+
+A profession name alone is NOT a valid job description.
+
+Examples that MUST be rejected:
+
+- "Actress"
+- "Cook"
+- "Software Engineer"
+- "Teacher"
+- "Doctor"
+
+A vague statement about a profession is also NOT sufficient.
+
+Examples that MUST be rejected:
+
+- "I am an actress"
+- "I am a cook"
+- "I am a software engineer"
+- "Cook with knowledge of Italian food"
+- "Actress with 5 years of experience"
+- "Developer with knowledge of Python"
+- "Chef with experience"
+
+The input must provide meaningful professional context.
+
+A valid job description should contain enough information about
+the role to determine meaningful interview topics. This may include:
+
+- responsibilities
+- duties
+- required skills
+- required knowledge
+- qualifications
+- tools or technologies
+- work activities
+- professional competencies
+- job objectives
+- work environment
+- expected tasks
+
+The profession does NOT have to be technical.
+
+Legitimate professional roles such as:
+
+- software engineer
+- actress
+- actor
+- chef
+- teacher
+- nurse
+- lawyer
+- photographer
+- mechanic
+- architect
+- sales professional
+- designer
+- fisherman
+
+are valid when the input actually describes the professional role
+and provides enough meaningful information about the work.
+
+For example, this SHOULD be accepted:
+
+"Frontend Developer responsible for building responsive web
+applications using React and JavaScript, integrating REST APIs,
+writing reusable components, fixing bugs, and collaborating with
+backend developers."
+
+This SHOULD be accepted:
+
+"Chef responsible for preparing Italian cuisine, managing kitchen
+operations, maintaining food safety standards, controlling
+ingredients, preparing menus, and supervising kitchen staff."
+
+This SHOULD be accepted:
+
+"Actress responsible for preparing scripted roles for film and
+television productions, attending auditions and rehearsals,
+collaborating with directors and cast members, studying characters,
+and adapting performances based on direction."
+
+This SHOULD be rejected:
+
+"I am a banana"
+
+This SHOULD be rejected:
+
+"banana"
+
+This SHOULD be rejected:
+
+"hello"
+
+This SHOULD be rejected:
+
+"I like football"
+
+This SHOULD be rejected:
+
+"I want to become rich"
+
+This SHOULD be rejected:
+
+"Actress"
+
+This SHOULD be rejected:
+
+"I am an actress"
+
+This SHOULD be rejected:
+
+"Actress with 5 years of experience"
+
+This SHOULD be rejected:
+
+"Cook with knowledge of Italian food"
+
+This SHOULD be rejected:
+
+"Software engineer with Python experience"
+
+This SHOULD be rejected:
+
+"Teacher with good communication skills"
+
+The important distinction is:
+
+A PERSON describing themselves is not automatically a job description.
+
+A PROFESSION NAME is not automatically a job description.
+
+A PROFESSION + one vague skill or experience statement is not
+automatically a job description.
+
+The input must contain enough professional context to generate
+meaningful interview questions specific to that role.
+
+Also reject:
+
+- random objects
+- animals
+- foods
+- nonsense
+- casual conversation
+- personal interests
+- hobbies
+- generic career aspirations
+- generic statements about someone's abilities
+- extremely vague professional statements
+- obviously contradictory or nonsensical claims
+
+Return is_valid = true ONLY when the input is sufficiently detailed
+and can reasonably be used as the basis for a professional interview.
+
+Job Description Input:
+{job_description}
+"""
+
+    response = job_validation_llm.invoke(prompt)
+
+    return response
+
+
+# ============================================================
+# 6. Analyze Job Description
 # ============================================================
 
 
 def analyze_job_description(job_description):
+
+    # --------------------------------------------------------
+    # Basic input validation
+    # --------------------------------------------------------
+
+    if not job_description:
+        raise ValueError(
+            "Please enter a job description."
+        )
+
+    job_description = job_description.strip()
+
+    if len(job_description) < 30:
+        raise ValueError(
+            "Please provide a more detailed job description."
+        )
+
+    if len(job_description) > 10000:
+        raise ValueError(
+            "Job description is too long."
+        )
+
+    # --------------------------------------------------------
+    # AI job-description validation
+    # --------------------------------------------------------
+
+    validation = validate_job_description(
+        job_description
+    )
+
+    if not validation.is_valid:
+        raise ValueError(
+            validation.reason
+        )
+
+    # --------------------------------------------------------
+    # Extract skills
+    # --------------------------------------------------------
 
     prompt = f"""
 Analyze the following job description.
@@ -124,14 +359,14 @@ Job Description:
 
 
 # ============================================================
-# 6. Generate MCQs
+# 7. Generate MCQs
 # ============================================================
 
 
 def generate_mcqs(job_description, skills):
 
     prompt = f"""
-Generate exactly 5 multiple-choice interview questions based on
+Generate exactly 10 multiple-choice interview questions based on
 the following job description and extracted skills.
 
 Job Description:
@@ -166,7 +401,7 @@ MCQ Requirements:
 - Questions should test practical understanding rather than obscure trivia.
 - Do not include explanations.
 
-Return exactly 5 questions.
+Return exactly 10 questions.
 """
 
     response = mcq_llm.invoke(prompt)
@@ -174,6 +409,11 @@ Return exactly 5 questions.
     # ------------------------------------------------------------
     # Validate and normalize every question
     # ------------------------------------------------------------
+
+    if len(response.questions) != 10:
+        raise ValueError(
+            "The AI did not generate exactly 10 interview questions."
+        )
 
     for question in response.questions:
 
@@ -234,7 +474,7 @@ Return exactly 5 questions.
 
 
 # ============================================================
-# 7. Answer Evaluation
+# 8. Answer Evaluation
 # ============================================================
 
 
