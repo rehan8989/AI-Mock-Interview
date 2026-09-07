@@ -15,19 +15,41 @@ const registerUser = async ({ name, email, password }) => {
         10
     );
 
-    const user = await User.create({
-        name,
-        email,
-        password: hashedPassword,
-    });
+    try {
+        const user = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+        });
 
-    // we'll decide what to return here next
-    return {
-    userId: user._id,
-    name: user.name,
-    email: user.email,
+        return {
+            userId: user._id,
+            name: user.name,
+            email: user.email,
+        };
+
+    } catch (error) {
+
+        // Handle duplicate email race condition
+        if (error.code === 11000) {
+            throw new Error("User already exists");
+        }
+
+        // Handle Mongoose validation errors
+        if (error.name === "ValidationError") {
+            const firstError =
+                Object.values(error.errors)[0];
+
+            throw new Error(
+                firstError?.message ||
+                "Please enter valid registration details"
+            );
+        }
+
+        throw error;
+    }
 };
-};
+
 
 const loginUser = async ({ email, password }) => {
 
@@ -40,23 +62,31 @@ const loginUser = async ({ email, password }) => {
     }
 
     const isPasswordCorrect =
-    await bcrypt.compare(
-        password,
-        user.password
-    );
-    
+        await bcrypt.compare(
+            password,
+            user.password
+        );
+
     if (!isPasswordCorrect) {
         throw new Error(
             "Incorrect Password"
         );
     }
-    
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-    
+
+    const token = jwt.sign(
+        { userId: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+    );
+
     return {
         userId: user._id,
         token,
     };
 };
 
-export { registerUser, loginUser, };
+
+export {
+    registerUser,
+    loginUser,
+};
