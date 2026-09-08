@@ -55,7 +55,7 @@ function JobDescription() {
           <textarea
             value={jobDescription}
             onChange={(event) => setJobDescription(event.target.value)}
-            placeholder="Paste job description here..."
+            placeholder="Describe the role, skills, technologies, or experience required. Example: Looking for a backend developer with Node.js, Express, MongoDB and REST API experience. You'll build APIs and backend services."
             className="h-56 w-full resize-none rounded-xl border border-gray-200 bg-white p-5 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
           />
 
