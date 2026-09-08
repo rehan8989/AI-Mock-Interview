@@ -7,7 +7,8 @@ import {
     Eye,
     EyeOff,
 } from "lucide-react";
-import axios from "axios";
+
+import api from "../services/api";
 
 import "./Register.css";
 import register1 from "../assets/images/register1.png";
@@ -46,8 +47,8 @@ const Register = () => {
         try {
             setLoading(true);
 
-            const response = await axios.post(
-                "/api/interview/evaluate",
+            const response = await api.post(
+                "/api/auth/register",
                 {
                     name,
                     email,
