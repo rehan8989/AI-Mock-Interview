@@ -3,7 +3,7 @@ export const generateInterview = async (jobDescription) => {
     console.log("1. Sending request to Node");
 
     const response = await api.post(
-        "/api/interview/evaluate",
+        "/api/interview/generate",
         {
             jobDescription,
         }
