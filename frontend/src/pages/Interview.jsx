@@ -301,7 +301,7 @@ function Interview() {
 
             const response =
                 await api.post(
-                    "http://localhost:5000/api/interview/evaluate",
+                    "/api/interview/evaluate",
                     {
                         interviewId:
                             interview._id,

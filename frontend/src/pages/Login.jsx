@@ -7,7 +7,7 @@ import {
     Eye,
     EyeOff,
 } from "lucide-react";
-import axios from "axios";
+import api from "../services/api";
 
 import "./Login.css";
 import login1 from "../assets/images/login1.png";
@@ -32,8 +32,8 @@ const Login = () => {
         try {
             setLoading(true);
 
-            const response = await axios.post(
-                "http://localhost:5000/api/auth/login",
+            const response = await api.post(
+                "/api/auth/login",
                 {
                     email,
                     password,
@@ -44,10 +44,10 @@ const Login = () => {
 
             if (response.data.success) {
 
-    login(response.data.token);
+                login(response.data.token);
 
-    navigate("/");
-}
+                navigate("/");
+            }
 
         } catch (error) {
 
@@ -165,12 +165,12 @@ const Login = () => {
                                 <LockKeyhole size={22} />
 
                                 <input
-                                    id="password"
                                     type={
                                         showPassword
                                             ? "text"
                                             : "password"
                                     }
+                                    id="password"
                                     placeholder="Enter your password"
                                     value={password}
                                     onChange={(e) =>
