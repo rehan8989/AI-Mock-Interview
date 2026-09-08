@@ -20,7 +20,7 @@ class JobDescriptionValidation(BaseModel):
     is_valid: bool = Field(
         description=(
             "Whether the input is a sufficiently detailed and legitimate "
-            "job description suitable for generating a professional interview"
+            "job description suitable for generating professional interview questions"
         )
     )
 
@@ -42,13 +42,21 @@ class JobSkills(BaseModel):
 
 class MCQ(BaseModel):
     question: str
-    options: list[str]
+
+    options: list[str] = Field(
+        min_length=4,
+        max_length=4,
+        description="Exactly 4 answer options"
+    )
+
     correctAnswer: str
     skill: str
 
 
 class MCQResponse(BaseModel):
     questions: list[MCQ] = Field(
+        min_length=10,
+        max_length=10,
         description="Exactly 10 multiple-choice interview questions"
     )
 
@@ -105,166 +113,144 @@ feedback_llm = llm.with_structured_output(
 def validate_job_description(job_description):
 
     prompt = f"""
-Determine whether the following input is a valid job description
-that can be used to create a professional job interview.
+Determine whether the following input is a legitimate and sufficiently
+useful job description for generating professional interview questions.
 
-The input must describe a legitimate professional role in enough
-detail to create meaningful interview questions.
+The goal is to determine whether the input provides enough PROFESSIONAL
+CONTEXT about a role.
 
 IMPORTANT:
 
-A profession name alone is NOT a valid job description.
+Do NOT require a specific job-description format.
 
-Examples that MUST be rejected:
-
-- "Actress"
-- "Cook"
-- "Software Engineer"
-- "Teacher"
-- "Doctor"
-
-A vague statement about a profession is also NOT sufficient.
-
-Examples that MUST be rejected:
-
-- "I am an actress"
-- "I am a cook"
-- "I am a software engineer"
-- "Cook with knowledge of Italian food"
-- "Actress with 5 years of experience"
-- "Developer with knowledge of Python"
-- "Chef with experience"
-
-The input must provide meaningful professional context.
-
-A valid job description should contain enough information about
-the role to determine meaningful interview topics. This may include:
+A job description does NOT need to contain all of the following:
 
 - responsibilities
 - duties
-- required skills
-- required knowledge
 - qualifications
-- tools or technologies
-- work activities
-- professional competencies
-- job objectives
-- work environment
+- skills
+- technologies
+- experience
+- objectives
+
+It is sufficient if the input provides enough meaningful information
+about the professional role through one or more of these areas.
+
+A valid job description may describe:
+
+- the professional role
+- responsibilities or duties
 - expected tasks
+- required skills
+- technologies or tools
+- qualifications
+- required experience
+- professional competencies
+- work activities
+- job objectives
+- industry-specific knowledge
 
-The profession does NOT have to be technical.
+For technical roles, a description containing a professional role plus
+several relevant technical skills, technologies, or experience requirements
+can be valid even if responsibilities are brief or absent.
 
-Legitimate professional roles such as:
+For non-technical roles, relevant professional skills, duties, experience,
+competencies, or work activities can also make the description valid.
 
-- software engineer
-- actress
-- actor
-- chef
-- teacher
-- nurse
-- lawyer
-- photographer
-- mechanic
-- architect
-- sales professional
-- designer
-- fisherman
+The important question is:
 
-are valid when the input actually describes the professional role
-and provides enough meaningful information about the work.
+"Does this input provide enough professional context to generate meaningful
+interview questions for this role?"
 
-For example, this SHOULD be accepted:
+------------------------------------------------------------
+INPUTS THAT MUST BE REJECTED
+------------------------------------------------------------
 
-"Frontend Developer responsible for building responsive web
-applications using React and JavaScript, integrating REST APIs,
-writing reusable components, fixing bugs, and collaborating with
-backend developers."
+Reject a profession name alone:
 
-This SHOULD be accepted:
+- "Software Engineer"
+- "Developer"
+- "Teacher"
+- "Chef"
+- "Photographer"
+
+Reject a profession with almost no useful context:
+
+- "Developer with experience"
+- "Software engineer with Python"
+- "Teacher with good communication skills"
+- "Chef with experience"
+
+Reject random or unrelated inputs:
+
+- "banana"
+- "hello"
+- "I like football"
+- "I want to become rich"
+- "Python"
+- "React"
+- "MongoDB"
+
+Reject casual personal statements that do not provide enough professional
+context.
+
+------------------------------------------------------------
+INPUTS THAT SHOULD BE ACCEPTED
+------------------------------------------------------------
+
+Accept descriptions that provide meaningful professional context.
+
+For example:
+
+"Frontend Developer responsible for building responsive web applications
+using React and JavaScript, integrating REST APIs, writing reusable
+components, fixing bugs, and collaborating with backend developers."
+
+Accept:
+
+"Backend Developer with strong experience in Node.js, Express.js,
+MongoDB, REST APIs, JWT authentication, Git, and asynchronous JavaScript.
+The developer will build APIs, manage databases, debug applications,
+and work with frontend developers."
+
+Accept:
+
+"React Developer with 3+ years of experience building responsive web
+applications using React, JavaScript, HTML, CSS, REST APIs and Git."
+
+Accept:
 
 "Chef responsible for preparing Italian cuisine, managing kitchen
-operations, maintaining food safety standards, controlling
-ingredients, preparing menus, and supervising kitchen staff."
+operations, maintaining food safety standards, preparing menus, and
+supervising kitchen staff."
 
-This SHOULD be accepted:
+Accept:
 
-"Actress responsible for preparing scripted roles for film and
-television productions, attending auditions and rehearsals,
-collaborating with directors and cast members, studying characters,
-and adapting performances based on direction."
+"Sales professional responsible for generating leads, communicating
+with customers, negotiating deals, maintaining client relationships,
+and meeting monthly sales targets."
 
-This SHOULD be rejected:
+------------------------------------------------------------
+IMPORTANT DECISION RULE
+------------------------------------------------------------
 
-"I am a banana"
+Be reasonably permissive toward legitimate job descriptions.
 
-This SHOULD be rejected:
+Do NOT reject a job description simply because it focuses heavily on
+skills, technologies, qualifications, or experience.
 
-"banana"
+Do NOT require the description to explicitly contain responsibilities.
 
-This SHOULD be rejected:
+Do NOT reject a technical job description merely because it contains
+many technical skills and tools.
 
-"hello"
+Only return is_valid = false when the input is clearly too vague,
+irrelevant, nonsensical, or lacks enough professional context to create
+meaningful interview questions.
 
-This SHOULD be rejected:
-
-"I like football"
-
-This SHOULD be rejected:
-
-"I want to become rich"
-
-This SHOULD be rejected:
-
-"Actress"
-
-This SHOULD be rejected:
-
-"I am an actress"
-
-This SHOULD be rejected:
-
-"Actress with 5 years of experience"
-
-This SHOULD be rejected:
-
-"Cook with knowledge of Italian food"
-
-This SHOULD be rejected:
-
-"Software engineer with Python experience"
-
-This SHOULD be rejected:
-
-"Teacher with good communication skills"
-
-The important distinction is:
-
-A PERSON describing themselves is not automatically a job description.
-
-A PROFESSION NAME is not automatically a job description.
-
-A PROFESSION + one vague skill or experience statement is not
-automatically a job description.
-
-The input must contain enough professional context to generate
-meaningful interview questions specific to that role.
-
-Also reject:
-
-- random objects
-- animals
-- foods
-- nonsense
-- casual conversation
-- personal interests
-- hobbies
-- generic career aspirations
-- generic statements about someone's abilities
-- extremely vague professional statements
-- obviously contradictory or nonsensical claims
-
-Return is_valid = true ONLY when the input is sufficiently detailed
-and can reasonably be used as the basis for a professional interview.
+Return is_valid = true when the input provides enough information to
+reasonably identify the professional role and generate relevant interview
+questions.
 
 Job Description Input:
 {job_description}
@@ -329,6 +315,7 @@ technologies, tools, and responsibilities required for this role.
 The role may be technical or non-technical.
 
 For technical roles, include things such as:
+
 - programming languages
 - frameworks
 - databases
@@ -337,6 +324,7 @@ For technical roles, include things such as:
 - development tools
 
 For non-technical roles, include things such as:
+
 - communication
 - customer service
 - problem solving
@@ -386,7 +374,8 @@ Requirements:
 
 MCQ Requirements:
 
-- Each question must have exactly 4 options.
+- Generate EXACTLY 10 questions.
+- Each question must have EXACTLY 4 options.
 - Only one option must be correct.
 - First create the 4 options.
 - Then select exactly one of those 4 options as the correct answer.
@@ -401,7 +390,8 @@ MCQ Requirements:
 - Questions should test practical understanding rather than obscure trivia.
 - Do not include explanations.
 
-Return exactly 10 questions.
+Return EXACTLY 10 questions.
+Each question must contain EXACTLY 4 options.
 """
 
     response = mcq_llm.invoke(prompt)
